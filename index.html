@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -9,24 +8,47 @@
     * { margin: 0; padding: 0; box-sizing: border-box; }
     html, body {
       height: 100%;
+      font-family: 'Great Vibes', cursive;
       background: black;
       color: white;
-      font-family: 'Great Vibes', cursive;
+      overflow: hidden;
       display: flex;
       justify-content: center;
       align-items: center;
-      overflow: hidden;
     }
-    #contenedor {
+    .pantalla, #final {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      width: 100%;
+      height: 100%;
+      padding: 20px;
+    }
+    #passwordScreen {
+      display: flex;
+      flex-direction: column;
+    }
+    input {
+      padding: 10px;
+      font-size: 1.2rem;
+      border-radius: 10px;
+      border: none;
+      margin-top: 10px;
       text-align: center;
     }
-    #frase {
-      font-size: 2.5rem;
-      margin-top: 20px;
-      padding: 10px 20px;
-      background-color: rgba(0, 0, 0, 0.5);
-      display: inline-block;
-      border-radius: 15px;
+    #mensaje, #finalMensaje {
+      font-size: 2rem;
+      padding: 20px;
+      background: rgba(0,0,0,0.5);
+      border-radius: 20px;
+      margin: 10px;
+    }
+    video {
+      max-width: 100%;
+      border-radius: 20px;
+      display: none;
     }
     .petalo {
       position: fixed;
@@ -34,48 +56,149 @@
       height: 30px;
       pointer-events: none;
       animation: caer 10s linear infinite;
+      z-index: 10;
     }
     @keyframes caer {
       0% { transform: translateY(-100px) rotate(0deg); }
       100% { transform: translateY(100vh) rotate(360deg); }
     }
+    .estrella {
+      position: fixed;
+      width: 2px;
+      height: 2px;
+      background: white;
+      border-radius: 50%;
+      animation: parpadear 2s infinite alternate;
+      z-index: 1;
+    }
+    @keyframes parpadear {
+      0% { opacity: 0.1; }
+      100% { opacity: 1; }
+    }
+    #final h1 {
+      font-size: 3rem;
+      color: pink;
+    }
   </style>
 </head>
 <body>
-  <div id="contenedor">
-    <h1 id="frase">Feliz cumpleaños 🎉</h1>
+  <div id="passwordScreen" class="pantalla" style="display: flex;">
+    <h1>💖 Ingresa la contraseña</h1>
+    <input type="password" id="passwordInput" placeholder="Escribe aquí..." />
   </div>
 
-  <audio id="musica1" src="musica1.mp3" autoplay muted></audio>
-  <audio id="musica2" src="musica2.mp3" autoplay muted></audio>
-  <video id="video" src="video.mp4" style="display:none;" autoplay muted></video>
+  <div id="intro" class="pantalla">
+    <h2 id="mensaje">Holaa... Buenas... Aquí está tu regalo.. jejeje</h2>
+  </div>
+
+  <div id="videoPantalla" class="pantalla">
+    <video id="miVideo" src="video.mp4" autoplay></video>
+  </div>
+
+  <div id="frasesPantalla" class="pantalla">
+    <div id="mensaje"></div>
+  </div>
+
+  <div id="final" class="pantalla">
+    <h1>Feliz cumpleaños señorita</h1>
+    <div id="finalMensaje">🎉 Que se cumplan todos tus deseos. Eres muy especial. 🎉</div>
+  </div>
+
+  <audio id="musica1" src="musica1.mp3"></audio>
+  <audio id="musica2" src="musica2.mp3"></audio>
 
   <script>
-    const musica1 = document.getElementById("musica1");
-    const musica2 = document.getElementById("musica2");
+    const passwordInput = document.getElementById('passwordInput');
+    const intro = document.getElementById('intro');
+    const frasesPantalla = document.getElementById('frasesPantalla');
+    const mensaje = document.getElementById('mensaje');
+    const video = document.getElementById('miVideo');
+    const videoPantalla = document.getElementById('videoPantalla');
+    const musica1 = document.getElementById('musica1');
+    const musica2 = document.getElementById('musica2');
+    const final = document.getElementById('final');
 
-    musica1.muted = false;
-    musica2.muted = false;
+    const frases = [
+      "Hoy celebramos a alguien increíble...",
+      "Tu sonrisa ilumina los días más grises...",
+      "Cada momento contigo es especial...",
+      "Gracias por ser como eres...",
+      "Eres única, maravillosa y muy querida...",
+      "Hoy es tu día, celébralo con alegría...",
+      "Nunca olvides lo especial que eres para mí...",
+      "Tu presencia alegra mi vida...",
+      "¡Feliz cumpleaños Yolanda!",
+      "Este regalo es solo una muestra del cariño que te tengo..."
+    ];
 
-    musica1.play().catch(e => console.log("bloqueado:", e));
+    let index = 0;
 
-    function lanzarPetalos() {
-      for (let i = 0; i < 15; i++) {
-        const petalo = document.createElement("img");
-        petalo.src = "petalos.png";
-        petalo.classList.add("petalo");
-        petalo.style.left = Math.random() * 100 + "vw";
-        petalo.style.animationDuration = 5 + Math.random() * 5 + "s";
-        document.body.appendChild(petalo);
-        setTimeout(() => petalo.remove(), 10000);
+    passwordInput.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') {
+        if (passwordInput.value === '23') {
+          document.getElementById('passwordScreen').style.display = 'none';
+          intro.style.display = 'flex';
+          setTimeout(() => {
+            intro.style.display = 'none';
+            videoPantalla.style.display = 'flex';
+            video.play();
+            setTimeout(() => {
+              videoPantalla.style.display = 'none';
+              mostrarFrases();
+              musica1.play();
+            }, 10000);
+          }, 4000);
+        }
+      }
+    });
+
+    function mostrarFrases() {
+      frasesPantalla.style.display = 'flex';
+      lanzarPetalos();
+      let intervalo = setInterval(() => {
+        if (index < frases.length) {
+          mensaje.innerText = frases[index];
+          index++;
+        } else {
+          clearInterval(intervalo);
+          frasesPantalla.style.display = 'none';
+          mostrarFinal();
+        }
+      }, 4600);
+    }
+
+    function mostrarFinal() {
+      final.style.display = 'flex';
+      musica1.pause();
+      musica2.play();
+      lanzarPetalos(true);
+      generarEstrellas();
+    }
+
+    function lanzarPetalos(extra = false) {
+      let cantidad = extra ? 30 : 15;
+      setInterval(() => {
+        for (let i = 0; i < cantidad; i++) {
+          const petalo = document.createElement("img");
+          petalo.src = "petalos.png";
+          petalo.classList.add("petalo");
+          petalo.style.left = Math.random() * 100 + "vw";
+          petalo.style.animationDuration = 5 + Math.random() * 5 + "s";
+          document.body.appendChild(petalo);
+          setTimeout(() => petalo.remove(), 10000);
+        }
+      }, 1000);
+    }
+
+    function generarEstrellas() {
+      for (let i = 0; i < 100; i++) {
+        const estrella = document.createElement("div");
+        estrella.className = "estrella";
+        estrella.style.left = Math.random() * 100 + "vw";
+        estrella.style.top = Math.random() * 100 + "vh";
+        document.body.appendChild(estrella);
       }
     }
-
-    function lanzarPetalosContinuos() {
-      setInterval(lanzarPetalos, 1000);
-    }
-
-    lanzarPetalosContinuos();
   </script>
 </body>
 </html>
