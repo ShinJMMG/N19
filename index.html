@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>🎁 Regalo Especial</title>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body {
+      height: 100%;
+      font-family: 'Georgia', serif;
+      overflow: hidden;
+    }
+
+    .center {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      text-align: center;
+      flex-direction: column;
+    }
+
+    /* Interfaz contraseña bonita */
+    #pantalla1 {
+      background: linear-gradient(135deg, #ffe0e0, #f8bbd0);
+      color: #4a0033;
+      font-family: 'Great Vibes', cursive;
+    }
+
+    #pantalla1 h1 {
+      font-size: 2.7em;
+      margin-bottom: 10px;
+      text-shadow: 1px 1px #fff;
+    }
+
+    #pantalla1 p {
+      font-size: 1.4em;
+      margin-bottom: 20px;
+      font-family: 'Georgia', serif;
+    }
+
+    input[type="password"] {
+      padding: 12px;
+      font-size: 20px;
+      border-radius: 10px;
+      border: 1px solid #d81b60;
+      outline: none;
+      box-shadow: 0 0 10px #f06292;
+    }
+
+    button {
+      padding: 10px 24px;
+      font-size: 18px;
+      margin-top: 20px;
+      border-radius: 10px;
+      border: none;
+      background: #ec407a;
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 0 10px #ad1457;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background: #d81b60;
+    }
+
+    /* Frases iniciales */
+    .frase {
+      font-size: 2.2em;
+      padding: 20px;
+      border-radius: 15px;
+      opacity: 0;
+      transition: opacity 1s;
+      max-width: 80vw;
+      margin: 0 auto;
+    }
+
+    /* Frases bonitas */
+    #frasesBonitas p {
+      font-size: 2em;
+      margin: 20px;
+      padding: 15px 25px;
+      background: rgba(255, 255, 255, 0.7);
+      border-radius: 20px;
+      color: black;
+      max-width: 90vw;
+      position: relative;
+      z-index: 1;
+    }
+
+    video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .petalo {
+      position: fixed;
+      width: 40px;
+      height: 40px;
+      pointer-events: none;
+      z-index: 999;
+      animation: caer 8s linear infinite;
+    }
+
+    @keyframes caer {
+      0% { transform: translateY(-100px) rotate(0); opacity: 1; }
+      100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+    }
+
+    /* Pantalla inicial con fondo negro durante frases iniciales */
+    #pantalla2 {
+      background: black;
+      color: white;
+    }
+
+    /* Pantalla final elegante */
+    #pantallaFinal {
+      background: linear-gradient(to bottom right, #1c1c1c, #3e2c41);
+      color: #ffeef0;
+      text-align: center;
+      padding: 30px;
+      font-family: 'Georgia', serif;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #pantallaFinal h1 {
+      font-size: 3em;
+      color: #ff80ab;
+      text-shadow: 1px 1px #000;
+      margin-bottom: 0.2em;
+      position: relative;
+      z-index: 1;
+    }
+
+    #pantallaFinal p {
+      font-size: 1.6em;
+      max-width: 80%;
+      margin: 0 auto;
+      line-height: 1.5;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Canvas estrellas */
+    canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+      z-index: 0;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Pantalla contraseña -->
+<div id="pantalla1" class="center">
+  <h1>🔐 Aquí está tu sorpresa 🎁</h1>
+  <p>Pero primero... una pista: "tu número favorito 💡"</p>
+  <input type="password" id="clave" placeholder="Contraseña" />
+  <button onclick="verificar()">Entrar</button>
+</div>
+
+<!-- Frases iniciales -->
+<div id="pantalla2" class="center" style="display:none;"></div>
+
+<!-- Video -->
+<video id="video" style="display:none;" src="video.mp4" autoplay></video>
+
+<!-- Fin.. -->
+<div id="pantalla3" class="center" style="display:none;"><h1>Fin..</h1></div>
+
+<!-- Broma -->
+<div id="pantalla4" class="center" style="display:none;"><h1>Ggg es broma 😅</h1></div>
+
+<!-- Frases bonitas -->
+<div id="pantalla5" class="center" style="display:none; position: relative; overflow: hidden;">
+  <canvas id="estrellasCanvas" width="0" height="0"></canvas>
+  <audio id="musica1" src="musica1.mp3" autoplay></audio>
+  <div id="frasesBonitas"></div>
+</div>
+
+<!-- Pantalla final -->
+<div id="pantallaFinal" class="center" style="display:none;">
+  <canvas id="estrellasCanvasFinal" width="0" height="0"></canvas>
+  <audio id="musica2" src="musica2.mp3" autoplay></audio>
+  <h1>🎉 Feliz cumpleaños señorita 🎉</h1>
+  <p>
+    Eres una persona maravillosa, especial, única...<br />
+    Que este día sea tan hermoso como tu sonrisa<br />
+    y tan especial como tu corazón 🌸
+  </p>
+</div>
+
+<script>
+  const frasesIniciales = [
+    "holaa...",
+    "buenas tardes...",
+    "aquí está tu regalo...",
+    "jejeje..."
+  ];
+  const frasesBonitas = [
+    "Hoy celebramos el regalo de tu existencia.",
+    "Tu sonrisa ilumina todo a tu alrededor.",
+    "Eres magia, ternura y alegría.",
+    "Feliz vuelta al sol, hermosa.",
+    "Cada momento contigo vale oro.",
+    "Gracias por existir y ser tú.",
+    "Que tus sueños se cumplan, uno a uno.",
+    "Siempre mereces lo mejor del mundo.",
+    "Este día es tuyo, disfrútalo como nunca.",
+    "Con cariño, por siempre. 🎈"
+  ];
+
+  // Función para verificar contraseña
+  function verificar() {
+    const clave = document.getElementById("clave").value;
+    if (clave === "23") {
+      document.getElementById("pantalla1").style.display = "none";
+      mostrarTexto(frasesIniciales, 0, () => {
+        reproducirVideo();
+      });
+    } else {
+      alert("Contraseña incorrecta");
+    }
+  }
+
+  // Mostrar frases iniciales con fondo negro y letras blancas, SIN pétalos
+  function mostrarTexto(frases, index, callback) {
+    const pantalla = document.getElementById("pantalla2");
+    pantalla.style.display = "flex";
+    pantalla.innerHTML = ""; // limpiar
+
+    const frase = document.createElement("div");
+    frase.className = "frase";
+    frase.textContent = frases[index];
+    frase.style.color = "white"; // letras blancas
+    frase.style.background = "rgba(0, 0, 0, 0.85)"; // fondo negro semitransparente
+    frase.style.borderRadius = "15px";
+    frase.style.padding = "20px";
+    frase.style.fontSize = "2.2em";
+    frase.style.opacity = "0";
+    pantalla.appendChild(frase);
+
+    pantalla.style.background = "black"; // fondo negro
+
+    // No lanzar pétalos aquí
+
+    setTimeout(() => {
+      frase.style.opacity = 1;
+    }, 100);
+
+    setTimeout(() => {
+      index++;
+      if (index < frases.length) {
+        mostrarTexto(frases, index, callback);
+      } else {
+        setTimeout(callback, 1000);
+      }
+    }, 2000);
+  }
+
+  // Reproducir video
+  function reproducirVideo() {
+    document.getElementById("pantalla2").style.display = "none";
+    const video = document.getElementById("video");
+    video.style.display = "block";
+    video.play();
+    setTimeout(() => {
+      video.style.display = "none";
+      mostrarFin();
+    }, 10000);
+  }
+
+  // Mostrar "Fin.." y "Ggg es broma" sin pétalos y con fondo negro y letras blancas
+  function mostrarFin() {
+    const pantalla3 = document.getElementById("pantalla3");
+    pantalla3.style.display = "flex";
+    pantalla3.style.background = "black";
+    pantalla3.style.color = "white";
+    setTimeout(() => {
+      pantalla3.style.display = "none";
+      const pantalla4 = document.getElementById("pantalla4");
+      pantalla4.style.display = "flex";
+      pantalla4.style.background = "black";
+      pantalla4.style.color = "white";
+      setTimeout(() => {
+        pantalla4.style.display = "none";
+        iniciarFrasesBonitas();
+      }, 2000);
+    }, 2000);
+  }
+
+  // Mostrar frases bonitas una por una con cambio de fondo, estrellas y pétalos
+  function iniciarFrasesBonitas() {
+    const contenedor = document.getElementById("pantalla5");
+    contenedor.style.display = "flex";
+    iniciarEstrellasEnPantallas();  // Iniciar estrellas
+    lanzarPetalosContinuos();
+    const frasesDiv = document.getElementById("frasesBonitas");
+    frasesDiv.innerHTML = "";
+    let i = 0;
+    const intervalo = setInterval(() => {
+      if (i < frasesBonitas.length) {
+        const p = document.createElement("p");
+        p.textContent = frasesBonitas[i];
+        frasesDiv.innerHTML = "";
+        frasesDiv.appendChild(p);
+        contenedor.style.background = coloresFondos();
+        i++;
+      } else {
+        clearInterval(intervalo);
+        setTimeout(() => {
+          contenedor.style.display = "none";
+          mostrarFinal();
+        }, 2000);
+      }
+    }, 4600);
+  }
+
+  // Mostrar pantalla final con muchos pétalos y estrellas
+  function mostrarFinal() {
+    const pantallaFinal = document.getElementById("pantallaFinal");
+    pantallaFinal.style.display = "flex";
+    iniciarEstrellasEnPantallas();  // Iniciar estrellas en pantalla final
+    for (let i = 0; i < 60; i++) {
+      lanzarPetalos();
+    }
+  }
+
+  // Colores bonitos para fondos de frases bonitas
+  function coloresFondos() {
+    const fondos = ['#fce4ec', '#f3e5f5', '#e1f5fe', '#fff3e0', '#ede7f6'];
+    return fondos[Math.floor(Math.random() * fondos.length)];
+  }
+
+  // Crear un pétalo que cae desde arriba con animación
+  function lanzarPetalos() {
+    const petalo = document.createElement("img");
+    petalo.src = "petalos.png";
+    petalo.classList.add("petalo");
+    petalo.style.left = Math.random() * 100 + "vw";
+    petalo.style.animationDelay = Math.random() * 5 + "s";
+    document.body.appendChild(petalo);
+    setTimeout(() => { petalo.remove(); }, 8000);
+  }
+
+  // Pétalos cayendo continuamente durante frases bonitas
+  let lluviaActiva = false;
+  function lanzarPetalosContinuos() {
+    if (lluviaActiva) return;
+    lluviaActiva = true;
+    const intervalo = setInterval(() => {
+      for (let i = 0; i < 10; i++) lanzarPetalos();
+    }, 1500);
+    setTimeout(() => {
+      clearInterval(intervalo);
+    }, 46000);
+  }
+
+  // Función para animar estrellas en un canvas dado su id
+  function iniciarEstrellas(canvasId) {
+    const canvas = document.getElementById(canvasId);
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+
+    function resize() {
+      canvas.width = canvas.clientWidth;
+      canvas.height = canvas.clientHeight;
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    const numEstrellas = 100;
+    const estrellas = [];
+
+    for (let i = 0; i < numEstrellas; i++) {
+      estrellas.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        radius: Math.random() * 1.2 + 0.5,
+        alpha: Math.random(),
+        alphaChange: (Math.random() * 0.02) + 0.005,
+        direction: Math.random() < 0.5 ? 1 : -1
+      });
+    }
+
+    function animar() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      estrellas.forEach(star => {
+        star.alpha += star.alphaChange * star.direction;
+        if (star.alpha <= 0) {
+          star.alpha = 0;
+          star.direction = 1;
+        } else if (star.alpha >= 1) {
+          star.alpha = 1;
+          star.direction = -1;
+        }
+        ctx.beginPath();
+        ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255, 255, 255, ${star.alpha})`;
+        ctx.shadowColor = 'white';
+        ctx.shadowBlur = 6;
+        ctx.fill();
+      });
+      requestAnimationFrame(animar);
+    }
+
+    animar();
+  }
+
+  // Función para iniciar estrellas en ambas pantallas
+  function iniciarEstrellasEnPantallas() {
+    iniciarEstrellas('estrellasCanvas');
+    iniciarEstrellas('estrellasCanvasFinal');
+  }
+</script>
+
+</body>
+</html>
