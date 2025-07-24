@@ -1,0 +1,81 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>🎁 Regalo Especial</title>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body {
+      height: 100%;
+      background: black;
+      color: white;
+      font-family: 'Great Vibes', cursive;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+    #contenedor {
+      text-align: center;
+    }
+    #frase {
+      font-size: 2.5rem;
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: rgba(0, 0, 0, 0.5);
+      display: inline-block;
+      border-radius: 15px;
+    }
+    .petalo {
+      position: fixed;
+      width: 30px;
+      height: 30px;
+      pointer-events: none;
+      animation: caer 10s linear infinite;
+    }
+    @keyframes caer {
+      0% { transform: translateY(-100px) rotate(0deg); }
+      100% { transform: translateY(100vh) rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <div id="contenedor">
+    <h1 id="frase">Feliz cumpleaños 🎉</h1>
+  </div>
+
+  <audio id="musica1" src="musica1.mp3" autoplay muted></audio>
+  <audio id="musica2" src="musica2.mp3" autoplay muted></audio>
+  <video id="video" src="video.mp4" style="display:none;" autoplay muted></video>
+
+  <script>
+    const musica1 = document.getElementById("musica1");
+    const musica2 = document.getElementById("musica2");
+
+    musica1.muted = false;
+    musica2.muted = false;
+
+    musica1.play().catch(e => console.log("bloqueado:", e));
+
+    function lanzarPetalos() {
+      for (let i = 0; i < 15; i++) {
+        const petalo = document.createElement("img");
+        petalo.src = "petalos.png";
+        petalo.classList.add("petalo");
+        petalo.style.left = Math.random() * 100 + "vw";
+        petalo.style.animationDuration = 5 + Math.random() * 5 + "s";
+        document.body.appendChild(petalo);
+        setTimeout(() => petalo.remove(), 10000);
+      }
+    }
+
+    function lanzarPetalosContinuos() {
+      setInterval(lanzarPetalos, 1000);
+    }
+
+    lanzarPetalosContinuos();
+  </script>
+</body>
+</html>
