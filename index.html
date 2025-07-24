@@ -8,197 +8,318 @@
     * { margin: 0; padding: 0; box-sizing: border-box; }
     html, body {
       height: 100%;
-      font-family: 'Great Vibes', cursive;
-      background: black;
-      color: white;
+      font-family: 'Georgia', serif;
       overflow: hidden;
+    }
+
+    .center {
       display: flex;
       justify-content: center;
       align-items: center;
-    }
-    .pantalla, #final {
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      width: 100%;
       height: 100%;
-      padding: 20px;
-    }
-    #passwordScreen {
-      display: flex;
+      text-align: center;
       flex-direction: column;
     }
-    input {
-      padding: 10px;
-      font-size: 1.2rem;
+
+    #pantalla1 {
+      background: linear-gradient(135deg, #ffe0e0, #f8bbd0);
+      color: #4a0033;
+      font-family: 'Great Vibes', cursive;
+    }
+
+    #pantalla1 h1 {
+      font-size: 2.7em;
+      margin-bottom: 10px;
+      text-shadow: 1px 1px #fff;
+    }
+
+    #pantalla1 p {
+      font-size: 1.4em;
+      margin-bottom: 20px;
+      font-family: 'Georgia', serif;
+    }
+
+    input[type="password"] {
+      padding: 12px;
+      font-size: 20px;
+      border-radius: 10px;
+      border: 1px solid #d81b60;
+      outline: none;
+      box-shadow: 0 0 10px #f06292;
+    }
+
+    button {
+      padding: 10px 24px;
+      font-size: 18px;
+      margin-top: 20px;
       border-radius: 10px;
       border: none;
-      margin-top: 10px;
-      text-align: center;
+      background: #ec407a;
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 0 10px #ad1457;
+      transition: background 0.3s;
     }
-    #mensaje, #finalMensaje {
-      font-size: 2rem;
+
+    button:hover {
+      background: #d81b60;
+    }
+
+    .frase {
+      font-size: 2.2em;
       padding: 20px;
-      background: rgba(0,0,0,0.5);
+      border-radius: 15px;
+      opacity: 0;
+      transition: opacity 1s;
+      max-width: 80vw;
+      margin: 0 auto;
+    }
+
+    #frasesBonitas p {
+      font-size: 2em;
+      margin: 20px;
+      padding: 15px 25px;
+      background: rgba(255, 255, 255, 0.7);
       border-radius: 20px;
-      margin: 10px;
-    }
-    video {
-      max-width: 100%;
-      border-radius: 20px;
-      display: none;
-    }
-    .petalo {
-      position: fixed;
-      width: 30px;
-      height: 30px;
-      pointer-events: none;
-      animation: caer 10s linear infinite;
-      z-index: 10;
-    }
-    @keyframes caer {
-      0% { transform: translateY(-100px) rotate(0deg); }
-      100% { transform: translateY(100vh) rotate(360deg); }
-    }
-    .estrella {
-      position: fixed;
-      width: 2px;
-      height: 2px;
-      background: white;
-      border-radius: 50%;
-      animation: parpadear 2s infinite alternate;
+      color: black;
+      max-width: 90vw;
+      position: relative;
       z-index: 1;
     }
-    @keyframes parpadear {
-      0% { opacity: 0.1; }
-      100% { opacity: 1; }
+
+    video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
-    #final h1 {
-      font-size: 3rem;
-      color: pink;
+
+    .petalo {
+      position: fixed;
+      width: 40px;
+      height: 40px;
+      pointer-events: none;
+      z-index: 999;
+      animation: caer 8s linear infinite;
+    }
+
+    @keyframes caer {
+      0% { transform: translateY(-100px) rotate(0); opacity: 1; }
+      100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+    }
+
+    #pantalla2 {
+      background: black;
+      color: white;
+    }
+
+    #pantallaFinal {
+      background: linear-gradient(to bottom right, #1c1c1c, #3e2c41);
+      color: #ffeef0;
+      text-align: center;
+      padding: 30px;
+      font-family: 'Georgia', serif;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #pantallaFinal h1 {
+      font-size: 3em;
+      color: #ff80ab;
+      text-shadow: 1px 1px #000;
+      margin-bottom: 0.2em;
+      position: relative;
+      z-index: 1;
+    }
+
+    #pantallaFinal p {
+      font-size: 1.6em;
+      max-width: 80%;
+      margin: 0 auto;
+      line-height: 1.5;
+      position: relative;
+      z-index: 1;
     }
   </style>
 </head>
 <body>
-  <div id="passwordScreen" class="pantalla" style="display: flex;">
-    <h1>💖 Ingresa la contraseña</h1>
-    <input type="password" id="passwordInput" placeholder="Escribe aquí..." />
-  </div>
 
-  <div id="intro" class="pantalla">
-    <h2 id="mensaje">Holaa... Buenas... Aquí está tu regalo.. jejeje</h2>
-  </div>
+<div id="pantalla1" class="center">
+  <h1>🔐 Aquí está tu sorpresa 🎁</h1>
+  <p>Pero primero... una pista: "tu número favorito 💡"</p>
+  <input type="password" id="clave" placeholder="Contraseña" />
+  <button onclick="verificar()">Entrar</button>
+</div>
 
-  <div id="videoPantalla" class="pantalla">
-    <video id="miVideo" src="video.mp4" autoplay></video>
-  </div>
+<div id="pantalla2" class="center" style="display:none;"></div>
+<video id="video" style="display:none;" src="video.mp4" autoplay></video>
+<div id="pantalla3" class="center" style="display:none;"><h1>Fin..</h1></div>
+<div id="pantalla4" class="center" style="display:none;"><h1>Ggg es broma 😅</h1></div>
 
-  <div id="frasesPantalla" class="pantalla">
-    <div id="mensaje"></div>
-  </div>
-
-  <div id="final" class="pantalla">
-    <h1>Feliz cumpleaños señorita</h1>
-    <div id="finalMensaje">🎉 Que se cumplan todos tus deseos. Eres muy especial. 🎉</div>
-  </div>
-
+<div id="pantalla5" class="center" style="display:none; position: relative; overflow: hidden;">
   <audio id="musica1" src="musica1.mp3"></audio>
+  <div id="frasesBonitas"></div>
+</div>
+
+<div id="pantallaFinal" class="center" style="display:none;">
   <audio id="musica2" src="musica2.mp3"></audio>
+  <h1>🎉 Feliz cumpleaños señorita 🎉</h1>
+  <p>
+    Eres una persona maravillosa, especial, única...<br />
+    Que este día sea tan hermoso como tu sonrisa<br />
+    y tan especial como tu corazón 🌸
+  </p>
+</div>
 
-  <script>
-    const passwordInput = document.getElementById('passwordInput');
-    const intro = document.getElementById('intro');
-    const frasesPantalla = document.getElementById('frasesPantalla');
-    const mensaje = document.getElementById('mensaje');
-    const video = document.getElementById('miVideo');
-    const videoPantalla = document.getElementById('videoPantalla');
-    const musica1 = document.getElementById('musica1');
-    const musica2 = document.getElementById('musica2');
-    const final = document.getElementById('final');
+<script>
+  const frasesIniciales = [
+    "holaa...",
+    "buenas tardes...",
+    "aquí está tu regalo...",
+    "jejeje..."
+  ];
+  const frasesBonitas = [
+    "Hoy celebramos el regalo de tu existencia.",
+    "Tu sonrisa ilumina todo a tu alrededor.",
+    "Eres magia, ternura y alegría.",
+    "Feliz vuelta al sol, hermosa.",
+    "Cada momento contigo vale oro.",
+    "Gracias por existir y ser tú.",
+    "Que tus sueños se cumplan, uno a uno.",
+    "Siempre mereces lo mejor del mundo.",
+    "Este día es tuyo, disfrútalo como nunca.",
+    "Con cariño, por siempre. 🎈"
+  ];
 
-    const frases = [
-      "Hoy celebramos a alguien increíble...",
-      "Tu sonrisa ilumina los días más grises...",
-      "Cada momento contigo es especial...",
-      "Gracias por ser como eres...",
-      "Eres única, maravillosa y muy querida...",
-      "Hoy es tu día, celébralo con alegría...",
-      "Nunca olvides lo especial que eres para mí...",
-      "Tu presencia alegra mi vida...",
-      "¡Feliz cumpleaños Yolanda!",
-      "Este regalo es solo una muestra del cariño que te tengo..."
-    ];
+  function verificar() {
+    const clave = document.getElementById("clave").value;
+    if (clave === "23") {
+      document.getElementById("pantalla1").style.display = "none";
+      mostrarTexto(frasesIniciales, 0, () => {
+        reproducirVideo();
+      });
+    } else {
+      alert("Contraseña incorrecta");
+    }
+  }
 
-    let index = 0;
+  function mostrarTexto(frases, index, callback) {
+    const pantalla = document.getElementById("pantalla2");
+    pantalla.style.display = "flex";
+    pantalla.innerHTML = "";
 
-    passwordInput.addEventListener('keydown', function(e) {
-      if (e.key === 'Enter') {
-        if (passwordInput.value === '23') {
-          document.getElementById('passwordScreen').style.display = 'none';
-          intro.style.display = 'flex';
-          setTimeout(() => {
-            intro.style.display = 'none';
-            videoPantalla.style.display = 'flex';
-            video.play();
-            setTimeout(() => {
-              videoPantalla.style.display = 'none';
-              mostrarFrases();
-              musica1.play();
-            }, 10000);
-          }, 4000);
-        }
+    const frase = document.createElement("div");
+    frase.className = "frase";
+    frase.textContent = frases[index];
+    frase.style.color = "white";
+    frase.style.background = "rgba(0, 0, 0, 0.85)";
+    pantalla.appendChild(frase);
+
+    setTimeout(() => {
+      frase.style.opacity = 1;
+    }, 100);
+
+    setTimeout(() => {
+      index++;
+      if (index < frases.length) {
+        mostrarTexto(frases, index, callback);
+      } else {
+        setTimeout(callback, 1000);
       }
-    });
+    }, 2000);
+  }
 
-    function mostrarFrases() {
-      frasesPantalla.style.display = 'flex';
-      lanzarPetalos();
-      let intervalo = setInterval(() => {
-        if (index < frases.length) {
-          mensaje.innerText = frases[index];
-          index++;
-        } else {
-          clearInterval(intervalo);
-          frasesPantalla.style.display = 'none';
+  function reproducirVideo() {
+    document.getElementById("pantalla2").style.display = "none";
+    const video = document.getElementById("video");
+    video.style.display = "block";
+    video.play();
+    setTimeout(() => {
+      video.style.display = "none";
+      mostrarFin();
+    }, 10000);
+  }
+
+  function mostrarFin() {
+    const pantalla3 = document.getElementById("pantalla3");
+    pantalla3.style.display = "flex";
+    pantalla3.style.background = "black";
+    pantalla3.style.color = "white";
+    setTimeout(() => {
+      pantalla3.style.display = "none";
+      const pantalla4 = document.getElementById("pantalla4");
+      pantalla4.style.display = "flex";
+      pantalla4.style.background = "black";
+      pantalla4.style.color = "white";
+      setTimeout(() => {
+        pantalla4.style.display = "none";
+        iniciarFrasesBonitas();
+      }, 2000);
+    }, 2000);
+  }
+
+  function iniciarFrasesBonitas() {
+    const contenedor = document.getElementById("pantalla5");
+    contenedor.style.display = "flex";
+    document.getElementById("musica1").play();
+    lanzarPetalosContinuos();
+
+    const frasesDiv = document.getElementById("frasesBonitas");
+    frasesDiv.innerHTML = "";
+    let i = 0;
+    const intervalo = setInterval(() => {
+      if (i < frasesBonitas.length) {
+        const p = document.createElement("p");
+        p.textContent = frasesBonitas[i];
+        frasesDiv.innerHTML = "";
+        frasesDiv.appendChild(p);
+        contenedor.style.background = coloresFondos();
+        i++;
+      } else {
+        clearInterval(intervalo);
+        setTimeout(() => {
+          contenedor.style.display = "none";
           mostrarFinal();
-        }
-      }, 4600);
-    }
-
-    function mostrarFinal() {
-      final.style.display = 'flex';
-      musica1.pause();
-      musica2.play();
-      lanzarPetalos(true);
-      generarEstrellas();
-    }
-
-    function lanzarPetalos(extra = false) {
-      let cantidad = extra ? 30 : 15;
-      setInterval(() => {
-        for (let i = 0; i < cantidad; i++) {
-          const petalo = document.createElement("img");
-          petalo.src = "petalos.png";
-          petalo.classList.add("petalo");
-          petalo.style.left = Math.random() * 100 + "vw";
-          petalo.style.animationDuration = 5 + Math.random() * 5 + "s";
-          document.body.appendChild(petalo);
-          setTimeout(() => petalo.remove(), 10000);
-        }
-      }, 1000);
-    }
-
-    function generarEstrellas() {
-      for (let i = 0; i < 100; i++) {
-        const estrella = document.createElement("div");
-        estrella.className = "estrella";
-        estrella.style.left = Math.random() * 100 + "vw";
-        estrella.style.top = Math.random() * 100 + "vh";
-        document.body.appendChild(estrella);
+        }, 2000);
       }
+    }, 4600);
+  }
+
+  function mostrarFinal() {
+    const pantallaFinal = document.getElementById("pantallaFinal");
+    pantallaFinal.style.display = "flex";
+    document.getElementById("musica2").play();
+    for (let i = 0; i < 60; i++) {
+      lanzarPetalos();
     }
-  </script>
+  }
+
+  function coloresFondos() {
+    const fondos = ['#fce4ec', '#f3e5f5', '#e1f5fe', '#fff3e0', '#ede7f6'];
+    return fondos[Math.floor(Math.random() * fondos.length)];
+  }
+
+  function lanzarPetalos() {
+    const petalo = document.createElement("img");
+    petalo.src = "petalos.png";
+    petalo.classList.add("petalo");
+    petalo.style.left = Math.random() * 100 + "vw";
+    petalo.style.animationDelay = Math.random() * 5 + "s";
+    document.body.appendChild(petalo);
+    setTimeout(() => { petalo.remove(); }, 8000);
+  }
+
+  let lluviaActiva = false;
+  function lanzarPetalosContinuos() {
+    if (lluviaActiva) return;
+    lluviaActiva = true;
+    const intervalo = setInterval(() => {
+      for (let i = 0; i < 10; i++) lanzarPetalos();
+    }, 1500);
+    setTimeout(() => {
+      clearInterval(intervalo);
+    }, 46000);
+  }
+</script>
+
 </body>
 </html>
