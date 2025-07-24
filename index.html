@@ -11,7 +11,7 @@
       font-family: 'Georgia', serif;
       overflow: hidden;
     }
-
+    
     .center {
       display: flex;
       justify-content: center;
@@ -183,14 +183,14 @@
 <!-- Frases bonitas -->
 <div id="pantalla5" class="center" style="display:none; position: relative; overflow: hidden;">
   <canvas id="estrellasCanvas" width="0" height="0"></canvas>
-  <audio id="musica1" src="musica1.mp3" autoplay></audio>
+  <audio id="música1" src="musica1.mp3" autoplay></audio>
   <div id="frasesBonitas"></div>
 </div>
 
 <!-- Pantalla final -->
 <div id="pantallaFinal" class="center" style="display:none;">
   <canvas id="estrellasCanvasFinal" width="0" height="0"></canvas>
-  <audio id="musica2" src="musica2.mp3" autoplay></audio>
+  <audio id="música2" src="musica2.mp3" autoplay></audio>
   <h1>🎉 Feliz cumpleaños señorita 🎉</h1>
   <p>
     Eres una persona maravillosa, especial, única...<br />
@@ -344,7 +344,7 @@
   // Crear un pétalo que cae desde arriba con animación
   function lanzarPetalos() {
     const petalo = document.createElement("img");
-    petalo.src = "petalos.png";
+    petalo.src = "pétalos.png";
     petalo.classList.add("petalo");
     petalo.style.left = Math.random() * 100 + "vw";
     petalo.style.animationDelay = Math.random() * 5 + "s";
