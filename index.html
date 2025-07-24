@@ -95,16 +95,23 @@
 
     .petalo {
       position: fixed;
+      top: -60px;
       width: 40px;
       height: 40px;
       pointer-events: none;
       z-index: 999;
-      animation: caer 8s linear infinite;
+      animation: caer 8s linear forwards;
     }
 
     @keyframes caer {
-      0% { transform: translateY(-100px) rotate(0); opacity: 1; }
-      100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+      0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(110vh) rotate(360deg);
+        opacity: 0;
+      }
     }
 
     #pantalla2 {
